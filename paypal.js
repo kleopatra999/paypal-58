@@ -2,10 +2,12 @@
 
 const readline = require('readline');
 const request = require('ajax-request');
+const fs = require('fs');
 
-
+// Support both forms: "./paypal input.txt" or "./paypal < input.txt"
+var input;
 const rl = readline.createInterface({
-    input: process.stdin,
+    input: (process.argv.length > 2)? fs.createReadStream(process.argv[2]) : process.stdin,
     output: null
 });
 
