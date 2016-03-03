@@ -1,6 +1,8 @@
 #!/usr/local/bin/node
 
 const readline = require('readline');
+const request = require('ajax-request');
+
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -11,7 +13,6 @@ rl.on('line', function(line) {
     // console.log(line);
     var cmd = line.split(/\s+/),
         action = cmd[0];
-    console.log(cmd);
 
     switch(action) {
     case 'Add':
@@ -29,32 +30,82 @@ rl.on('line', function(line) {
 });
 
 rl.on('close', function() {
-    var summary = summaryAction();
-    console.log(summary);
+    summaryAction();
 });
 
 function addAction(name, account, limit) {
-    console.log('Add!', name, account, limit);
     // POST /accounts
-}
-
-function chargeAction(name, amount) {
-    console.log('Charge!', name, amount);
-    // PATCH /accounts/{name}
-    // [{"field": "balance", "action": "charge", "amount": amount}]
+    request.post(
+        {
+            url: 'http://localhost:3000/accounts',
+            data: {
+                "account": account,
+                "name": name,
+                "limit": getAmountNumber(limit),
+                "balance": 0
+            },
+            headers: {
+                "Content-Type": "application/json"
+            }
+        },
+        function(err, res, body) {
+            if (err) console.log(err);
+        }
+    );
 }
 
 function creditAction(name, amount) {
-    console.log('Credit!', name, amount);
-    // PATCH /accounts/{name}
-    // [{"field": "balance", "action": "credit", "amount": amount}]
+    balanceAction('credit', name, amount);
+}
+
+function chargeAction(name, amount) {
+    balanceAction('charge', name, amount);
+}
+
+function balanceAction(action, name, amount) {
+    // PATCH /accounts/:name
+    // [{"field": "balance", "action": action, "amount": amount}]
+    var amountNumber = getAmountNumber(amount);
+
+    request(
+        {
+            url: 'http://localhost:3000/accounts/' + name,
+            method: 'PATCH',
+            data: {
+                "field": "balance",
+                "action": action,
+                "amount": amountNumber
+            }
+        },
+        function(err, res, body) {
+            if (err) {
+                // Spec says not to show error
+                // console.log(err);
+            }
+        }
+    );
 }
 
 function summaryAction() {
-    console.log('Summary!');
     // GET /summary
-    return [];
+    request(
+        'http://localhost:3000/accounts',
+        function(err, res, body) {
+            if (err) {
+                console.log(err);
+            } else {
+                console.log(body);
+            }
+        }
+    );
 }
 
+
+function getAmountNumber(amount) {
+    var amountComponenets = /^([^\d]+)(\d*)$/.exec(amount),
+        denomination = amountComponenets[1],
+        amountNumber = amountComponenets[2];
+    return parseInt(amountNumber);
+}
 
 
