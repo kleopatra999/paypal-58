@@ -1,17 +1,21 @@
 Setup
-
+```
 % git clone git@github.com:rrazony/paypal.git
 % cd paypal
 % npm i
-
+```
 Start grunt to start the Express server.  Any changes to api.js will
 cause grunt to restart the Express server.
+```
 % grunt dev
+```
 
 To run the client program:
+```
 % ./paypal < input.txt
 OR
 $ ./paypal input.txt
+```
 
 Assumptions:
 - Used in-memory storage instead of other kinds of storage (fs, MongoDB, etc.) to 
