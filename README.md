@@ -26,6 +26,9 @@ Assumptions:
   of the input.txt file
 - Used Grunt because it is easy to configure for restarting express server automatically
   when changes are made to the REST api source code
+- Used Advanced Rest Client Application to make manual http calls during development of the client and REST api
+  https://chrome.google.com/webstore/detail/advanced-rest-client/hgmloofddffdnphfgcellkdfbfbjeloo/reviews?hl=en-US&utm_source=ARC
+- To focus on thr REST api, I did not code the Luhn validation code, I used https://gist.github.com/ShirtlessKirk/2134376
 
 # Basic Credit Card Processing
 -----
