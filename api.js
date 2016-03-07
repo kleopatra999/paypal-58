@@ -19,6 +19,7 @@ var data = {
 
 app.get('/', function (req, res) {
     res.send(
+        'Welcome to PayPal API\n' +
         'GET    /accounts       Get all accounts\n' +
         'POST   /accounts       Create new account, payload: {"account": "12345", "name":"Joe", "limit":"1000", "balance":"0"}\n' +
         'PATCH  /accounts/Joe   Update an account, payload: {"field":"balance", "action":"charge", "amount":"50"}\n'
@@ -49,7 +50,6 @@ app.get('/accounts', function (req, res) {
 // No need to validate account ids here because summary must
 //  include invalid account ads as well.
 app.post('/accounts', function (req, res) {
-
     data.accounts[req.body.account] = {
         "name": req.body.name,
         "limit": req.body.limit,
@@ -113,3 +113,5 @@ function isAccountValid(account) {
     var luhnChk=function(a){return function(c){for(var l=c.length,b=1,s=0,v;l;)v=parseInt(c.charAt(--l),10),s+=(b^=1)?a[v]:v;return s&&0===s%10}}([0,2,4,6,8,1,3,5,7,9]);
     return luhnChk(account);
 }
+
+module.exports = app;
